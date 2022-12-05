@@ -9,22 +9,22 @@ package com.acaimania.strategy;
 public class IFood implements DeliveryServiceStrategy {
 
     private static IFood iFood;
-    public static final Double DELIVERYPRICE = 3.0;
+    public static final Double DELIVERY_PRICE = 3.0;
 
     private IFood() {
         super();
     }
 
     public static IFood getInstance() {
-        if (iFood == null) {
-            iFood = new IFood();
+        if (IFood.iFood == null) {
+            IFood.iFood = new IFood();
         }
-        return iFood;
+        return IFood.iFood;
     }
 
     @Override
     public double calculateDeliveryPrice() {
-        return DELIVERYPRICE;
+        return IFood.DELIVERY_PRICE;
     }
 
 }

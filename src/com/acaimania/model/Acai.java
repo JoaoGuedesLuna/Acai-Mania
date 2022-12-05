@@ -6,7 +6,7 @@ package com.acaimania.model;
  * @author João Guedes.
  */
 public abstract class Acai {
-    
+
     private Double price;
     private String quantity;
 
@@ -27,8 +27,8 @@ public abstract class Acai {
     }
 
     /**
-     * Esse método faz a preparação do açaí.
+     * Método que lista todos os ingredientes do açaí
      */
-    public abstract void make();
+    public abstract void list();
 
 }

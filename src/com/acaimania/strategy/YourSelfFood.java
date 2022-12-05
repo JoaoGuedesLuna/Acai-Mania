@@ -9,22 +9,22 @@ package com.acaimania.strategy;
 public class YourSelfFood implements DeliveryServiceStrategy {
 
     private static YourSelfFood yourSelfFood;
-    public static final Double DELIVERYPRICE = 3.0;
+    public static final Double DELIVERY_PRICE = 3.0;
 
     private YourSelfFood() {
         super();
     }
 
     public static YourSelfFood getInstance() {
-        if (yourSelfFood == null) {
-            yourSelfFood = new YourSelfFood();
+        if (YourSelfFood.yourSelfFood == null) {
+            YourSelfFood.yourSelfFood = new YourSelfFood();
         }
-        return yourSelfFood;
+        return YourSelfFood.yourSelfFood;
     }
 
     @Override
     public double calculateDeliveryPrice() {
-        return DELIVERYPRICE;
+        return YourSelfFood.DELIVERY_PRICE;
     }
 
 }

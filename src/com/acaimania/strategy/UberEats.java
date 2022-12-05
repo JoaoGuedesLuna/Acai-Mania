@@ -9,22 +9,22 @@ package com.acaimania.strategy;
 public class UberEats implements DeliveryServiceStrategy {
 
     private static UberEats uberEats;
-    public static final Double DELIVERYPRICE = 3.75;
+    public static final Double DELIVERY_PRICE = 3.75;
 
     private UberEats() {
         super();
     }
 
     public static UberEats getInstance() {
-        if (uberEats == null) {
-            uberEats = new UberEats();
+        if (UberEats.uberEats == null) {
+            UberEats.uberEats = new UberEats();
         }
-        return uberEats;
+        return UberEats.uberEats;
     }
 
     @Override
     public double calculateDeliveryPrice() {
-        return DELIVERYPRICE;
+        return UberEats.DELIVERY_PRICE;
     }
 
 }

@@ -1,19 +1,31 @@
 package com.acaimania;
 
-import com.acaimania.decorator.*;
+import com.acaimania.model.decorator.*;
 import com.acaimania.model.Acai;
 import com.acaimania.model.BigAcai;
 import com.acaimania.model.SmallAcai;
 import com.acaimania.service.DeliveryService;
 import com.acaimania.strategy.*;
-
 import java.awt.Robot;
 import java.awt.AWTException;
 import java.awt.event.KeyEvent;
 import java.util.Scanner;
 
+/**
+ * Classe onde o programa será executado.
+ *
+ * @author João Guedes.
+ */
 public class AcaiManiaApplication {
 
+    /**
+     * Método que exibe um menu onde o usuário poderá escolher se deseja uma porção pequena ou uma porção grande de açaí.
+     * Retorna o açaí que o usuário escolheu, caso ele opte por sair será retornado o valor null.
+     *
+     * @param scan Scanner que fará a leitura de dados.
+     *
+     * @return Retorna o açaí que o usuário escolheu, caso ele opte por sair será retornado o valor null.
+     */
     public static Acai showAcaiOptionsMenu(Scanner scan) {
         StringBuilder acaiOptions = acaiOptions();
         String validOptions = "12xX";
@@ -32,6 +44,11 @@ public class AcaiManiaApplication {
         } while(true);
     }
 
+    /**
+     * Método que retorna um StringBuilder contendo as opções de açaí disponíveis.
+     *
+     * @return Retorna um StringBuilder contendo as opções de açaí disponíveis.
+     */
     public static StringBuilder acaiOptions() {
         Acai smallAcai = SmallAcai.getInstance();
         Acai bigAcai = BigAcai.getInstance();
@@ -45,23 +62,36 @@ public class AcaiManiaApplication {
         return sb;
     }
 
+    /**
+     * Método que retorna um açaí de acordo com a opção do usuário.
+     *
+     * @param userOption Opção do usuário.
+     *
+     * @return Retorna um açaí de acordo com a opção do usuário.
+     */
     public static Acai getAcai(String userOption) {
-        switch (userOption) {
-            case "1" -> {
-                return SmallAcai.getInstance();
-            }
-            case "2" -> {
-                return BigAcai.getInstance();
-            }
-            default -> {
-                return null;
-            }
-        }
+        return switch (userOption) {
+            case "1" -> SmallAcai.getInstance();
+            case "2" -> BigAcai.getInstance();
+            default -> null;
+        };
     }
 
-    public static Acai showAcaiAdditionalOptionsMenu(Acai acai, Scanner scan) {
+    /**
+     * Método que exibe um menu onde o usuário poderá escolher quais adicionais ele deseja adicionar ao seu açaí.
+     * Retorna o açaí que o usuário escolheu, com os adicionais que ele optou por colocar. Caso o usuário opte por
+     * sair será retornaoo o valor Null.
+     *
+     * @param acai Açai do usuário.
+     *
+     * @param scan Scanner que fará a leitura dos dados.
+     *
+     * @return Retorna o açaí que o usuário escolheu, com os adicionais que ele optou por colocar. Caso o usuário opte por
+     * sair será retornaoo o valor Null.
+     */
+    public static Acai showAdditionalOptionsMenu(Acai acai, Scanner scan) {
         clearScreen();
-        StringBuilder acaiAdditionalOptions = acaiAdditionalOptions();
+        StringBuilder acaiAdditionalOptions = additionalOptions();
         String validOptions = "123456sSxX";
         String userOption;
         do {
@@ -77,47 +107,49 @@ public class AcaiManiaApplication {
         } while(true);
     }
 
-    public static StringBuilder acaiAdditionalOptions() {
+    /**
+     * Método que retorna um StringBuilder contendo as opções de adicionais disponíveis.
+     *
+     * @return Retorna um StringBuilder contendo as opções de adicionais disponíveis.
+     */
+    public static StringBuilder additionalOptions() {
         StringBuilder sb = new StringBuilder();
         sb.append("🍨 🍨 🍨 🍨 🍨 🍨 AÇAÍ MANIA 🍨 🍨 🍨 🍨 🍨 🍨\n");
         sb.append("\nEscolha uma das opções de adicionais:\n");
-        sb.append("\n[1] - Leite Condesado -> R$").append(LeiteCondesado.PRICE);
-        sb.append("\n[2] - Leite em pó -> R$").append(LeiteEmPo.PRICE);
-        sb.append("\n[3] - Paçoca -> R$").append(Pacoca.PRICE);
-        sb.append("\n[4] - Granola -> R$").append(Granola.PRICE);
-        sb.append("\n[5] - Kimi -> R$").append(Kiwi.PRICE);
-        sb.append("\n[6] - Morango -> R$").append(Morango.PRICE);
+        sb.append("\n[1] - Leite Condesado -> R$").append(CondensedMilk.ADDITIONAL_PRICE);
+        sb.append("\n[2] - Leite em pó -> R$").append(MilkPowder.ADDITIONAL_PRICE);
+        sb.append("\n[3] - Paçoca -> R$").append(Pacoca.ADDITIONAL_PRICE);
+        sb.append("\n[4] - Granola -> R$").append(Muesli.ADDITIONAL_PRICE);
+        sb.append("\n[5] - Kimi -> R$").append(Kiwi.ADDITIONAL_PRICE);
+        sb.append("\n[6] - Morango -> R$").append(Strawberry.ADDITIONAL_PRICE);
         sb.append("\n[s] - Sem mais adicionais");
         sb.append("\n[x] - Sair");
         sb.append("\n\n               Opção: ");
         return sb;
     }
 
+    /**
+     * Método que monta um açaí de acordo com a opção de adicional do usuário.
+     *
+     * @param acai Açaí do usuário.
+     *
+     * @param additionalOption Opção de adicional que o usuário escolheu.
+     *
+     * @param scan Scanner que fará a leitura de dados.
+     *
+     * @return Retorna um açaí de acordo com a opção de adicional do usuário.
+     */
     public static Acai assemblyAcai(Acai acai, String additionalOption, Scanner scan) {
-        if (additionalOption.equals("1")) {
-            return showAcaiAdditionalOptionsMenu(new LeiteCondesado(acai), scan);
-        }
-        if (additionalOption.equals("2")) {
-            return showAcaiAdditionalOptionsMenu(new LeiteEmPo(acai), scan);
-        }
-        if (additionalOption.equals("3")) {
-            return showAcaiAdditionalOptionsMenu(new Pacoca(acai), scan);
-        }
-        if (additionalOption.equals("4")) {
-            return showAcaiAdditionalOptionsMenu(new Granola(acai), scan);
-        }
-        if (additionalOption.equals("5"))  {
-            return showAcaiAdditionalOptionsMenu(new Kiwi(acai), scan);
-        }
-        if (additionalOption.equals("6")) {
-            return showAcaiAdditionalOptionsMenu(new Morango(acai), scan);
-        }
-        if (additionalOption.equalsIgnoreCase("s")) {
-            showEndLine();
-            return acai;
-        }
-        showEndLine();
-        return null;
+        return switch (additionalOption.toLowerCase()) {
+            case "1" -> showAdditionalOptionsMenu(new CondensedMilk(acai), scan);
+            case "2" -> showAdditionalOptionsMenu(new MilkPowder(acai), scan);
+            case "3" -> showAdditionalOptionsMenu(new Pacoca(acai), scan);
+            case "4" -> showAdditionalOptionsMenu(new Muesli(acai), scan);
+            case "5" -> showAdditionalOptionsMenu(new Kiwi(acai), scan);
+            case "6" -> showAdditionalOptionsMenu(new Strawberry(acai), scan);
+            case "s" -> acai;
+            default -> null;
+        };
     }
 
     public static double showDeliveryOptionsMenu(Scanner scan) {
@@ -132,8 +164,9 @@ public class AcaiManiaApplication {
                 System.out.print("\n           ❌ Opção inválida ❌");
                 showEndLine();
             }
-            else
+            else {
                 invalid = false;
+            }
         } while(invalid);
         if (userOption.equalsIgnoreCase("x")) {
             showEndLine();
@@ -149,10 +182,10 @@ public class AcaiManiaApplication {
         StringBuilder sb = new StringBuilder();
         sb.append("🍨 🍨 🍨 🍨 🍨 🍨 AÇAÍ MANIA 🍨 🍨 🍨 🍨 🍨 🍨\n");
         sb.append("\nEscolha uma das opções de entrega:\n");
-        sb.append("\n[1] - Ifood -> R$").append(IFood.DELIVERYPRICE);
-        sb.append("\n[2] - NineNineFood -> R$").append(NineNineFood.DELIVERYPRICE);
-        sb.append("\n[3] - UberEats -> R$").append(UberEats.DELIVERYPRICE);
-        sb.append("\n[4] - YourSelfFood -> R$").append(YourSelfFood.DELIVERYPRICE);
+        sb.append("\n[1] - Ifood -> R$").append(IFood.DELIVERY_PRICE);
+        sb.append("\n[2] - NineNineFood -> R$").append(NineNineFood.DELIVERY_PRICE);
+        sb.append("\n[3] - UberEats -> R$").append(UberEats.DELIVERY_PRICE);
+        sb.append("\n[4] - YourSelfFood -> R$").append(YourSelfFood.DELIVERY_PRICE);
         sb.append("\n[x] - Sair");
         sb.append("\n\n               Opção: ");
         return sb;
@@ -185,7 +218,7 @@ public class AcaiManiaApplication {
         sleep(1000);
         System.out.println(".\n");
         sleep(1000);
-        acai.make();
+        acai.list();
         System.out.println("\n🔘 Açaí pronto\n");
         System.out.println("       -------------------------");
         System.out.println("         > Preço  Açaí: R$" + acai.getPrice());
@@ -232,7 +265,8 @@ public class AcaiManiaApplication {
         Acai acai = showAcaiOptionsMenu(scan);
         if (acai == null)
             return;
-        acai = showAcaiAdditionalOptionsMenu(acai, scan);
+        acai = showAdditionalOptionsMenu(acai, scan);
+        showEndLine();
         if (acai == null)
             return;
         double deliveryPrice = showDeliveryOptionsMenu(scan);
