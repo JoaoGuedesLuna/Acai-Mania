@@ -17,7 +17,7 @@ public class BigAcai extends Acai {
     }
 
     /**
-     * Método retorna uma mesma instância de um SmallAcai.
+     * Método que retorna uma mesma instância de um SmallAcai.
      *
      * @return Retorna uma mesma instância de um SmallAcai.
      */

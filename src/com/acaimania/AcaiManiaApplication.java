@@ -120,7 +120,7 @@ public class AcaiManiaApplication {
         sb.append("\n[2] - Leite em pó -> R$").append(MilkPowder.ADDITIONAL_PRICE);
         sb.append("\n[3] - Paçoca -> R$").append(Pacoca.ADDITIONAL_PRICE);
         sb.append("\n[4] - Granola -> R$").append(Muesli.ADDITIONAL_PRICE);
-        sb.append("\n[5] - Kimi -> R$").append(Kiwi.ADDITIONAL_PRICE);
+        sb.append("\n[5] - Kiwi -> R$").append(Kiwi.ADDITIONAL_PRICE);
         sb.append("\n[6] - Morango -> R$").append(Strawberry.ADDITIONAL_PRICE);
         sb.append("\n[s] - Sem mais adicionais");
         sb.append("\n[x] - Sair");
@@ -152,6 +152,13 @@ public class AcaiManiaApplication {
         };
     }
 
+    /**
+     * Método que exibe um menu onde o usuário poderá escolher o serviço de entrega que ele deseja.
+     *
+     * @param scan Scanner que fará a leitura de dados.
+     *
+     * @return Retorna o valor da entrega.
+     */
     public static double showDeliveryOptionsMenu(Scanner scan) {
         StringBuilder deliveryOptions = deliveryOptions();
         String validOptions = "1234xX";
@@ -178,6 +185,11 @@ public class AcaiManiaApplication {
         return deliveryService.calculateDeliveryPrice();
     }
 
+    /**
+     * Método que retorna um StringBuilder contendo todas as opções de serviço de entrega.
+     *
+     * @return Retorna um StringBuilder contendo todas as opções de serviço de entrega.
+     */
     public static StringBuilder deliveryOptions() {
         StringBuilder sb = new StringBuilder();
         sb.append("🍨 🍨 🍨 🍨 🍨 🍨 AÇAÍ MANIA 🍨 🍨 🍨 🍨 🍨 🍨\n");
@@ -191,22 +203,32 @@ public class AcaiManiaApplication {
         return sb;
     }
 
+    /**
+     * Método que retorna uma implementação de um DeliveryService de acordo com a opção do usuário.
+     *
+     * @param userOption Opção do usuário.
+     *
+     * @return Retorna uma implementação de um DeliveryService de acordo com a opção do usuário.
+     */
     public static DeliveryServiceStrategy getDeliveryServiceStrategy(String userOption) {
         DeliveryServiceStrategy deliveryServiceStrategy;
         switch (userOption) {
-            case "1" ->
-                    deliveryServiceStrategy = IFood.getInstance();
-            case "2" ->
-                    deliveryServiceStrategy = NineNineFood.getInstance();
-            case "3" ->
-                    deliveryServiceStrategy = UberEats.getInstance();
-            case "4" ->
-                    deliveryServiceStrategy = YourSelfFood.getInstance();
-            default ->
-                throw new IllegalArgumentException("Unknown delivery strategy");
+            case "1" -> deliveryServiceStrategy = IFood.getInstance();
+            case "2" -> deliveryServiceStrategy = NineNineFood.getInstance();
+            case "3" -> deliveryServiceStrategy = UberEats.getInstance();
+            case "4" -> deliveryServiceStrategy = YourSelfFood.getInstance();
+            default -> throw new IllegalArgumentException("Unknown delivery strategy");
         }
         return deliveryServiceStrategy;
     }
+
+    /**
+     * Método que exibe o menu de preparação do pedido.
+     * 
+     * @param acai Açaí que o usuário escolheu, com todos os seus adicionais.
+     *             
+     * @param deliveryPrice Preço cobrado pelo serviço de entrega.
+     */
     public static void showOrderPreparationMenu(Acai acai, Double deliveryPrice) {
         double totalPrice = acai.getPrice() + deliveryPrice;
         System.out.println("🍨 🍨 🍨 🍨 🍨 🍨 AÇAÍ MANIA 🍨 🍨 🍨 🍨 🍨 🍨\n");
@@ -229,6 +251,9 @@ public class AcaiManiaApplication {
         sleep(2000);
     }
 
+    /**
+     * Método que exibe as últimas linhas de menu.
+     */
     public static void showEndLine() {
         System.out.println("\n\n🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨  🍨 🍨 🍨 🍨 🍨 🍨 🍨");
         sleep(2000);
@@ -254,6 +279,11 @@ public class AcaiManiaApplication {
         sleep(500);
     }
 
+    /**
+     * Método que faz uma pausa no programa.
+     *
+     * @param millis Tempo em milissegundo em que o programa será "pausado".
+     */
     private static void sleep(int millis) {
         try {
             Thread.sleep(millis);
