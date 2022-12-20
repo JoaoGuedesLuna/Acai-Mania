@@ -18,17 +18,13 @@ public class Muesli extends Additional {
      */
     public Muesli(Acai acai) {
         super(acai);
+        Double price = super.getACAI().getPrice() + Muesli.ADDITIONAL_PRICE;
+        super.setPrice(price);
     }
 
     @Override
-    public void list() {
-        super.getACAI().list();
-        System.out.println("✔ Granola");
-    }
-
-    @Override
-    public Double getPrice() {
-        return super.getACAI().getPrice() + Muesli.ADDITIONAL_PRICE;
+    public String list() {
+        return super.getACAI().list() + "\n✔ Granola";
     }
 
 }

@@ -1,14 +1,14 @@
 package com.acaimania;
 
 import com.acaimania.model.decorator.*;
-import com.acaimania.model.Acai;
-import com.acaimania.model.BigAcai;
-import com.acaimania.model.SmallAcai;
+import com.acaimania.model.*;
 import com.acaimania.service.DeliveryService;
 import com.acaimania.strategy.*;
 import java.awt.Robot;
 import java.awt.AWTException;
 import java.awt.event.KeyEvent;
+import java.time.LocalDate;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -27,13 +27,14 @@ public class AcaiManiaApplication {
      * @return Retorna o açaí que o usuário escolheu, caso ele opte por sair será retornado o valor null.
      */
     public static Acai showAcaiOptionsMenu(Scanner scan) {
+        clearScreen();
         StringBuilder acaiOptions = acaiOptions();
-        String validOptions = "12xX";
+        String validOptions = "12X";
         String userOption;
         do {
             System.out.print(acaiOptions);
             userOption = scan.next();
-            if (userOption.length() > 1 || !validOptions.contains(userOption)) {
+            if (userOption.length() > 1 || !validOptions.contains(userOption.toUpperCase())) {
                 System.out.print("\n           ❌ Opção inválida ❌");
                 showEndLine();
             }
@@ -63,45 +64,48 @@ public class AcaiManiaApplication {
     }
 
     /**
-     * Método que retorna um açaí de acordo com a opção do usuário.
+     * Método que retorna um açaí conforme a opção do usuário.
      *
      * @param userOption Opção do usuário.
      *
-     * @return Retorna um açaí de acordo com a opção do usuário.
+     * @return Retorna um açaí conforme a opção do usuário.
      */
     public static Acai getAcai(String userOption) {
         return switch (userOption) {
-            case "1" -> SmallAcai.getInstance();
-            case "2" -> BigAcai.getInstance();
-            default -> null;
+            case "1": yield SmallAcai.getInstance();
+            case "2": yield BigAcai.getInstance();
+            default:
+                showByeMessage();
+                yield null;
         };
     }
 
     /**
      * Método que exibe um menu onde o usuário poderá escolher quais adicionais ele deseja adicionar ao seu açaí.
      * Retorna o açaí que o usuário escolheu, com os adicionais que ele optou por colocar. Caso o usuário opte por
-     * sair será retornaoo o valor Null.
+     * sair será retornado o valor null.
      *
      * @param acai Açai do usuário.
      *
      * @param scan Scanner que fará a leitura dos dados.
      *
      * @return Retorna o açaí que o usuário escolheu, com os adicionais que ele optou por colocar. Caso o usuário opte por
-     * sair será retornaoo o valor Null.
+     * sair será retornado o valor null.
      */
     public static Acai showAdditionalOptionsMenu(Acai acai, Scanner scan) {
         clearScreen();
-        StringBuilder acaiAdditionalOptions = additionalOptions();
-        String validOptions = "123456sSxX";
+        StringBuilder additionalOptions = additionalOptions();
+        String validOptions = "123456SX";
         String userOption;
         do {
-            System.out.print(acaiAdditionalOptions);
+            System.out.print(additionalOptions);
             userOption = scan.next();
-            if (userOption.length() > 1 || !validOptions.contains(userOption)) {
+            if (userOption.length() > 1 || !validOptions.contains(userOption.toUpperCase())) {
                 System.out.print("\n           ❌ Opção inválida ❌");
                 showEndLine();
             }
             else {
+                showEndLine();
                 return assemblyAcai(acai, userOption, scan);
             }
         } while(true);
@@ -129,7 +133,7 @@ public class AcaiManiaApplication {
     }
 
     /**
-     * Método que monta um açaí de acordo com a opção de adicional do usuário.
+     * Método que monta um açaí conforme a opção de adicional do usuário.
      *
      * @param acai Açaí do usuário.
      *
@@ -137,18 +141,21 @@ public class AcaiManiaApplication {
      *
      * @param scan Scanner que fará a leitura de dados.
      *
-     * @return Retorna um açaí de acordo com a opção de adicional do usuário.
+     * @return Retorna um açaí conforme a opção de adicional do usuário.
      */
     public static Acai assemblyAcai(Acai acai, String additionalOption, Scanner scan) {
-        return switch (additionalOption.toLowerCase()) {
-            case "1" -> showAdditionalOptionsMenu(new CondensedMilk(acai), scan);
-            case "2" -> showAdditionalOptionsMenu(new MilkPowder(acai), scan);
-            case "3" -> showAdditionalOptionsMenu(new Pacoca(acai), scan);
-            case "4" -> showAdditionalOptionsMenu(new Muesli(acai), scan);
-            case "5" -> showAdditionalOptionsMenu(new Kiwi(acai), scan);
-            case "6" -> showAdditionalOptionsMenu(new Strawberry(acai), scan);
-            case "s" -> acai;
-            default -> null;
+        return switch (additionalOption.toUpperCase()) {
+            case "1": yield showAdditionalOptionsMenu(new CondensedMilk(acai), scan);
+            case "2": yield showAdditionalOptionsMenu(new MilkPowder(acai), scan);
+            case "3": yield showAdditionalOptionsMenu(new Pacoca(acai), scan);
+            case "4": yield showAdditionalOptionsMenu(new Muesli(acai), scan);
+            case "5": yield showAdditionalOptionsMenu(new Kiwi(acai), scan);
+            case "6": yield showAdditionalOptionsMenu(new Strawberry(acai), scan);
+            case "S":
+                yield acai;
+            default:
+                showByeMessage();
+                yield  null;
         };
     }
 
@@ -159,15 +166,15 @@ public class AcaiManiaApplication {
      *
      * @return Retorna o valor da entrega.
      */
-    public static double showDeliveryOptionsMenu(Scanner scan) {
+    public static Double showDeliveryOptionsMenu(Scanner scan) {
         StringBuilder deliveryOptions = deliveryOptions();
-        String validOptions = "1234xX";
+        String validOptions = "1234X";
         String userOption;
         boolean invalid = true;
         do {
             System.out.print(deliveryOptions);
             userOption = scan.next();
-            if (userOption.length() > 1 || !validOptions.contains(userOption)) {
+            if (userOption.length() > 1 || !validOptions.contains(userOption.toUpperCase())) {
                 System.out.print("\n           ❌ Opção inválida ❌");
                 showEndLine();
             }
@@ -175,13 +182,13 @@ public class AcaiManiaApplication {
                 invalid = false;
             }
         } while(invalid);
+        showEndLine();
         if (userOption.equalsIgnoreCase("x")) {
-            showEndLine();
-            return 0;
+            showByeMessage();
+            return null;
         }
         DeliveryServiceStrategy deliveryServiceStrategy = getDeliveryServiceStrategy(userOption);
         DeliveryService deliveryService = new DeliveryService(deliveryServiceStrategy);
-        showEndLine();
         return deliveryService.calculateDeliveryPrice();
     }
 
@@ -204,22 +211,20 @@ public class AcaiManiaApplication {
     }
 
     /**
-     * Método que retorna uma implementação de um DeliveryService de acordo com a opção do usuário.
+     * Método que retorna uma implementação de um DeliveryService conforme a opção do usuário.
      *
      * @param userOption Opção do usuário.
      *
-     * @return Retorna uma implementação de um DeliveryService de acordo com a opção do usuário.
+     * @return Retorna uma implementação de um DeliveryService conforme a opção do usuário.
      */
     public static DeliveryServiceStrategy getDeliveryServiceStrategy(String userOption) {
-        DeliveryServiceStrategy deliveryServiceStrategy;
-        switch (userOption) {
-            case "1" -> deliveryServiceStrategy = IFood.getInstance();
-            case "2" -> deliveryServiceStrategy = NineNineFood.getInstance();
-            case "3" -> deliveryServiceStrategy = UberEats.getInstance();
-            case "4" -> deliveryServiceStrategy = YourSelfFood.getInstance();
+        return switch (userOption) {
+            case "1" -> IFood.getInstance();
+            case "2" -> NineNineFood.getInstance();
+            case "3" -> UberEats.getInstance();
+            case "4" -> YourSelfFood.getInstance();
             default -> throw new IllegalArgumentException("Unknown delivery strategy");
-        }
-        return deliveryServiceStrategy;
+        };
     }
 
     /**
@@ -240,7 +245,7 @@ public class AcaiManiaApplication {
         sleep(1000);
         System.out.println(".\n");
         sleep(1000);
-        acai.list();
+        System.out.println(acai.list());
         System.out.println("\n🔘 Açaí pronto\n");
         System.out.println("       -------------------------");
         System.out.println("         > Preço  Açaí: R$" + acai.getPrice());
@@ -249,6 +254,87 @@ public class AcaiManiaApplication {
         System.out.println("          VALOR TOTAL: R$" + totalPrice);
         System.out.println("\n🍨 🍨 🍨 🍨 🍨 🍨 🍨  🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨\n");
         sleep(2000);
+    }
+
+    /**
+     * Método que pergunta se o usuário deseja confirmar sua compra, caso ele deseje será retornado o valor true,
+     * caso ele não deseje será retornado o valor false.
+     *
+     * @param scan Scanner que fará a leitura de opção do usuário.
+     *
+     * @return Retorna um valor boolean que corresponde a opção do usuário de finalizar ou não sua compra.
+     */
+    public static boolean showFinalizeOrderConfirmation(Scanner scan) {
+        System.out.print("\n          ");
+        String message = "Confirmar compra [s/n]? ";
+        char[] letters = message.toCharArray();
+        for (char letter : letters) {
+            System.out.print(letter);
+            sleep(150);
+        }
+        String option = scan.next();
+        showEndLine();
+        return option.equalsIgnoreCase("s");
+    }
+
+    //TODO:
+    /**
+     * Método que gera a nota fiscal da compra do usuário.
+     *
+     * @param acai Açaí comprado pelo usuário.
+     *
+     * @param deliveryPrice Preço da entrega do Açaí.
+     *
+     * @return Retorna o caminho de diretório da nota fiscal do usuário.
+     */
+    public static String generateReceipt(Acai acai, Double deliveryPrice) {
+        double totalPrice = acai.getPrice() + deliveryPrice;
+        StringBuilder receiptDescription = new StringBuilder();
+        receiptDescription.append("Data da Compra:").append(LocalDate.now()).append("\n");
+        receiptDescription.append(acai.list()).append("\n");
+        receiptDescription.append("Preço do Açaí: R$").append(acai.getPrice()).append("\n");
+        receiptDescription.append("Preço da Entrega: R$").append(deliveryPrice).append("\n");
+        receiptDescription.append("Preço Total: R$").append(totalPrice).append("\n");
+        return null;
+    }
+
+    //TODO:
+    /**
+     * Método que exibe um menu com os dados da nota fiscal e o tempo de entrega do pedido do usuário.
+     *
+     * @param path Caminho de diretório da nota fiscal da compra do usuário.
+     */
+    public static void showReceipt(String path) {
+        int minutes = new Random().nextInt(15,36);
+        System.out.println("🍨 🍨 🍨 🍨 🍨 🍨 AÇAÍ MANIA 🍨 🍨 🍨 🍨 🍨 🍨\n");
+        System.out.println("Obrigado pela sua compra! 🤩");
+        System.out.println("\nSeu pedido será entregue em " + minutes + " minutos.");
+        System.out.println("\nSua nota fiscal foi gerada e está no arquivo de");
+        System.out.println("nome " + path + ".");
+        System.out.println("\nEsse é um mostruário da sua nota ⬇");
+        System.out.println("\n🍨 🍨 🍨 🍨 🍨 🍨 🍨  🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨\n");
+    }
+
+    /**
+     * Método que exibe uma mensagem caso o usuário opte por não finalizar a compra.
+     */
+    public static void showCancelOrderMessage() {
+        System.out.println("🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨");
+        System.out.println("       Que pena, você não finalizou sua compra.         ");
+        System.out.println("                Esperamos que volte!                    ");
+        System.out.println("🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨    ");
+        sleep(1000);
+    }
+
+    /**
+     * Método que exibe uma mensagem de despedida caso o usuário deseje sair da aplicação.
+     */
+    public static void showByeMessage() {
+        System.out.println("🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 ");
+        System.out.println("         Já está indo embora? Que pena.               ");
+        System.out.println("           Esperamos te ver novamente!                ");
+        System.out.println("🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨 🍨     ");
+        sleep(1000);
     }
 
     /**
@@ -261,22 +347,23 @@ public class AcaiManiaApplication {
     }
 
     /**
-     * Esse método tem a função de limpar a tela do console. Para que esse método funcione é necessário adicionar
-     * o atalho Ctrl + shift + Q  ao clear all do console do intellij. O que ocorre aqui é que um bot será criado
-     * para apertar esse atalho, dessa forma limpando a tela.
+     * Esse método tem a função de limpar a tela do console.
      */
     private static void clearScreen() {
-        try {
-            Robot bot = new Robot();
-            bot.keyPress(KeyEvent.VK_CONTROL);
-            bot.keyPress(KeyEvent.VK_SHIFT);
-            bot.keyPress(KeyEvent.VK_Q);
-            bot.keyRelease(KeyEvent.VK_CONTROL);
-            bot.keyRelease(KeyEvent.VK_SHIFT);
-            bot.keyRelease(KeyEvent.VK_Q);
-        }
-        catch(AWTException ignored){}
-        sleep(500);
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        //Para que esse método funcione é necessário adicionar o atalho Ctrl + shift + Q  ao clear all do console do intellij.
+        // O que ocorre aqui é que um bot será criado para apertar esse atalho, dessa forma limpando a tela.
+        //try {
+        //Robot bot = new Robot();
+        //bot.keyPress(KeyEvent.VK_CONTROL);
+        //bot.keyPress(KeyEvent.VK_SHIFT);
+        //bot.keyPress(KeyEvent.VK_Q);
+        //bot.keyRelease(KeyEvent.VK_CONTROL);
+        //bot.keyRelease(KeyEvent.VK_SHIFT);
+        //bot.keyRelease(KeyEvent.VK_Q);
+        //}
+        //catch(AWTException ignored){}
+        //sleep(500);
     }
 
     /**
@@ -293,17 +380,26 @@ public class AcaiManiaApplication {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         Acai acai = showAcaiOptionsMenu(scan);
-        if (acai == null)
+        if (acai == null) {
             return;
+        }
         acai = showAdditionalOptionsMenu(acai, scan);
-        showEndLine();
-        if (acai == null)
+        if (acai == null) {
             return;
-        double deliveryPrice = showDeliveryOptionsMenu(scan);
-        scan.close();
-        if (deliveryPrice == 0)
+        }
+        Double deliveryPrice = showDeliveryOptionsMenu(scan);
+        if (deliveryPrice == null) {
             return;
+        }
         showOrderPreparationMenu(acai, deliveryPrice);
+        boolean finalizeOrder = showFinalizeOrderConfirmation(scan);
+        if (!finalizeOrder) {
+            showCancelOrderMessage();
+            return;
+        }
+        scan.close();
+        String path = generateReceipt(acai, deliveryPrice);
+        showReceipt(path);
     }
 
 }

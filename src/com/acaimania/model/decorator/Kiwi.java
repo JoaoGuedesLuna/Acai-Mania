@@ -18,17 +18,13 @@ public class Kiwi extends Additional {
      */
     public Kiwi(Acai acai) {
         super(acai);
+        Double price = super.getACAI().getPrice() + Kiwi.ADDITIONAL_PRICE;
+        super.setPrice(price);
     }
 
     @Override
-    public void list() {
-        super.getACAI().list();
-        System.out.println("✔ Kiwi");
-    }
-
-    @Override
-    public Double getPrice() {
-        return super.getACAI().getPrice() + Kiwi.ADDITIONAL_PRICE;
+    public String list() {
+        return super.getACAI().list() + "\n✔ Kiwi";
     }
 
 }

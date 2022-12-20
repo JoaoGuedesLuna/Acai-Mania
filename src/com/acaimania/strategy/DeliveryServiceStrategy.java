@@ -8,6 +8,11 @@ package com.acaimania.strategy;
  */
 public interface DeliveryServiceStrategy {
 
+    /**
+     * Esse método retorna o valor de entrega do serviço prestado.
+     *
+     * @return Retorna o valor de entrega do serviço prestado.
+     */
     double calculateDeliveryPrice();
 
 }

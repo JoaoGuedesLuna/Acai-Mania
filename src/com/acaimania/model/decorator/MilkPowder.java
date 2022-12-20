@@ -18,17 +18,13 @@ public class MilkPowder extends Additional {
      */
     public MilkPowder(Acai acai) {
         super(acai);
+        Double price = super.getACAI().getPrice() + MilkPowder.ADDITIONAL_PRICE;
+        super.setPrice(price);
     }
 
     @Override
-    public void list() {
-        super.getACAI().list();
-        System.out.println("✔ Leite em Pó");
-    }
-
-    @Override
-    public Double getPrice() {
-        return super.getACAI().getPrice() + MilkPowder.ADDITIONAL_PRICE;
+    public String list() {
+        return super.getACAI().list() + "\n✔ Leite em Pó";
     }
 
 }

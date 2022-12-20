@@ -18,17 +18,13 @@ public class Strawberry extends Additional {
      */
     public Strawberry(Acai acai) {
         super(acai);
+        Double price = super.getACAI().getPrice() + Strawberry.ADDITIONAL_PRICE;
+        super.setPrice(price);
     }
 
     @Override
-    public void list() {
-        super.getACAI().list();
-        System.out.println("✔ Morango");
-    }
-
-    @Override
-    public Double getPrice() {
-        return super.getACAI().getPrice() + Strawberry.ADDITIONAL_PRICE;
+    public String list() {
+        return super.getACAI().list() + "\n✔ Morango";
     }
 
 }

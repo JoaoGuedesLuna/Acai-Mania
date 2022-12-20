@@ -8,7 +8,7 @@ package com.acaimania.model;
  */
 public class SmallAcai extends Acai {
 
-    private static SmallAcai smallAcai;
+    private static SmallAcai smallAcaiInstance;
 
     private SmallAcai() {
         super();
@@ -22,15 +22,15 @@ public class SmallAcai extends Acai {
      * @return Retorna uma mesma instância de um SmallAcai.
      */
     public static SmallAcai getInstance() {
-        if ( SmallAcai.smallAcai == null) {
-            SmallAcai.smallAcai = new SmallAcai();
+        if ( SmallAcai.smallAcaiInstance == null) {
+            SmallAcai.smallAcaiInstance = new SmallAcai();
         }
-        return  SmallAcai.smallAcai;
+        return  SmallAcai.smallAcaiInstance;
     }
 
     @Override
-    public void list() {
-        System.out.println("✔ "+ super.getQuantity() + " de Açaí");
+    public String list() {
+        return "✔ " + super.getQuantity() + " de Açaí";
     }
 
 }

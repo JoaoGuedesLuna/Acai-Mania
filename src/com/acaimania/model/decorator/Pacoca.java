@@ -18,17 +18,13 @@ public class Pacoca extends Additional {
      */
     public Pacoca(Acai acai) {
         super(acai);
+        Double price = super.getACAI().getPrice() + Pacoca.ADDITIONAL_PRICE;
+        super.setPrice(price);
     }
 
     @Override
-    public void list() {
-        super.getACAI().list();
-        System.out.println("✔ Paçoca");
-    }
-
-    @Override
-    public Double getPrice() {
-        return super.getACAI().getPrice() + Pacoca.ADDITIONAL_PRICE;
+    public String list() {
+        return super.getACAI().list() + "\n✔ Paçoca";
     }
 
 }

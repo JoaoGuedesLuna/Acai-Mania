@@ -18,17 +18,13 @@ public class CondensedMilk extends Additional {
      */
     public CondensedMilk(Acai acai) {
         super(acai);
+        Double price = super.getACAI().getPrice() + CondensedMilk.ADDITIONAL_PRICE;
+        super.setPrice(price);
     }
 
     @Override
-    public void list() {
-        super.getACAI().list();
-        System.out.println("✔ Leite Condesado");
-    }
-
-    @Override
-    public Double getPrice() {
-        return super.getACAI().getPrice() + CondensedMilk.ADDITIONAL_PRICE;
+    public String list() {
+        return super.getACAI().list() + "\n✔ Leite Condesado";
     }
 
 }
